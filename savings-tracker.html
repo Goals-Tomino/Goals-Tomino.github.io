@@ -4,446 +4,511 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Savings Goal Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
-
 :root {
-  --bg: #f5f0e8;
-  --card: #fefcf7;
-  --dark: #1a1410;
-  --accent: #e8380d;
-  --accent2: #2d6a4f;
-  --muted: #8a7f72;
-  --border: #e0d9ce;
-  --track: #e8e2d9;
+  --bg: #0c0c0f;
+  --surface: #13131a;
+  --surface2: #1a1a24;
+  --border: #252535;
+  --border2: #2e2e45;
+  --text: #e8e8f0;
+  --muted: #5a5a7a;
+  --muted2: #7a7a9a;
+  --accent: #6c63ff;
+  --accent2: #ff6b6b;
+  --accent3: #43e8a0;
+  --accent-glow: rgba(108,99,255,0.25);
+  --yellow: #f5c542;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
-  color: var(--dark);
-  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
   min-height: 100vh;
-  padding: 2rem 1.5rem;
-  background-image:
-    radial-gradient(circle at 10% 10%, rgba(232,56,13,0.04) 0%, transparent 40%),
-    radial-gradient(circle at 90% 90%, rgba(45,106,79,0.04) 0%, transparent 40%);
+  overflow-x: hidden;
 }
 
-.page-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3rem, 8vw, 5.5rem);
-  letter-spacing: 0.02em;
-  line-height: 0.9;
-  margin-bottom: 0.2rem;
-  color: var(--dark);
-}
-
-.page-title span { color: var(--accent); }
-
-.page-sub {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--muted);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 2.5rem;
-}
-
-/* Goal Card */
-.goal-card {
-  background: var(--card);
-  border: 1.5px solid var(--border);
-  border-radius: 16px;
-  overflow: hidden;
-  max-width: 560px;
-  margin: 0 auto 1.5rem;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.04);
-  animation: slideUp 0.5s ease both;
-}
-
-.goal-card:nth-child(2) { animation-delay: 0.1s; }
-.goal-card:nth-child(3) { animation-delay: 0.2s; }
-
-.card-top {
-  padding: 1.4rem 1.5rem 1rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.card-emoji {
-  font-size: 2rem;
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--track);
-  border-radius: 12px;
-  flex-shrink: 0;
-}
-
-.card-info { flex: 1; }
-
-.card-name {
-  font-weight: 600;
-  font-size: 1rem;
-  line-height: 1.3;
-  margin-bottom: 0.2rem;
-}
-
-.card-shop {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  margin-top: 0.4rem;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--accent);
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  border-bottom: 1px dashed rgba(232,56,13,0.3);
-  transition: border-color 0.2s;
-}
-.card-link:hover { border-color: var(--accent); }
-
-.card-price {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.9rem;
-  color: var(--dark);
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-}
-
-/* Progress section */
-.card-progress {
-  padding: 1.2rem 1.5rem;
-}
-
-.progress-nums {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 0.7rem;
-}
-
-.num-saved {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.5rem;
-  color: var(--accent2);
-  letter-spacing: 0.03em;
-}
-
-.num-needed {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
-.num-needed .hl {
-  color: var(--accent);
-  font-weight: 500;
-}
-
-.progress-track {
-  height: 10px;
-  background: var(--track);
-  border-radius: 99px;
-  overflow: hidden;
-  position: relative;
-  margin-bottom: 0.6rem;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 99px;
-  background: linear-gradient(90deg, var(--accent2), #52b788);
-  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-}
-
-.progress-fill::after {
+body::before {
   content: '';
-  position: absolute;
-  right: 0; top: 0; bottom: 0;
-  width: 6px;
-  background: rgba(255,255,255,0.4);
-  border-radius: 99px;
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(108,99,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108,99,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.progress-fill.danger {
-  background: linear-gradient(90deg, #e8380d, #ff7043);
+.ambient { position: fixed; pointer-events: none; z-index: 0; }
+.ambient-1 {
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(108,99,255,0.08) 0%, transparent 70%);
+  top: -200px; left: -200px;
 }
-.progress-fill.mid {
-  background: linear-gradient(90deg, #e8a20d, #f4c430);
-}
-
-.progress-pct {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  text-align: right;
+.ambient-2 {
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(67,232,160,0.06) 0%, transparent 70%);
+  bottom: -150px; right: -100px;
 }
 
-/* Input section */
-.card-inputs {
-  padding: 1rem 1.5rem 1.4rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 0.7rem;
-  align-items: flex-end;
+.wrapper {
+  position: relative; z-index: 1;
+  max-width: 680px; margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
 }
 
-.input-group { flex: 1; }
+/* HEADER */
+.header { margin-bottom: 3rem; animation: fadeUp 0.6s ease both; }
 
-.input-label {
+.header-tag {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase;
+  background: rgba(108,99,255,0.08); border: 1px solid rgba(108,99,255,0.2);
+  padding: 0.35rem 0.85rem; border-radius: 99px; margin-bottom: 1.2rem;
+}
+
+.header-tag::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s infinite;
+}
+
+.title {
+  font-size: clamp(3rem, 9vw, 5.5rem); font-weight: 800;
+  line-height: 0.92; letter-spacing: -0.03em; margin-bottom: 1rem;
+}
+
+.title-grad {
   display: block;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 0.4rem;
+  background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 50%, var(--accent3) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 
-.input-wrap {
-  position: relative;
+.header-meta { display: flex; align-items: center; gap: 1.5rem; margin-top: 1.2rem; flex-wrap: wrap; }
+
+.header-stat {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+  color: var(--muted2); letter-spacing: 0.04em;
+}
+.header-stat strong { color: var(--text); font-weight: 700; }
+.hdr-divider { width: 1px; height: 18px; background: var(--border); }
+
+/* TOTAL BAR */
+.total-bar {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.3rem 1.5rem;
+  margin-bottom: 2rem; display: flex; align-items: center;
+  justify-content: space-between; gap: 1rem;
+  animation: fadeUp 0.6s ease both 0.1s; position: relative; overflow: hidden;
 }
 
-.input-wrap span {
-  position: absolute;
-  left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.8rem;
-  color: var(--muted);
+.total-bar::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(108,99,255,0.04) 0%, transparent 60%);
   pointer-events: none;
 }
 
+.total-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.total-amount { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+.total-amount span { font-size: 0.85rem; color: var(--muted2); font-weight: 400; }
+
+.total-sub {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  color: var(--muted); margin-top: 0.2rem;
+}
+.total-sub em { color: var(--muted2); font-style: normal; }
+
+.total-ring { width: 64px; height: 64px; flex-shrink: 0; position: relative; }
+.total-ring svg { transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: var(--border2); stroke-width: 5; }
+.ring-fill {
+  fill: none; stroke: url(#ringGrad); stroke-width: 5;
+  stroke-linecap: round; stroke-dasharray: 163; stroke-dashoffset: 163;
+  transition: stroke-dashoffset 1s cubic-bezier(0.34,1.56,0.64,1);
+}
+.ring-label {
+  position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; font-weight: 700; color: var(--accent);
+}
+
+/* GOAL CARD */
+.goal-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; margin-bottom: 1.2rem; overflow: hidden;
+  position: relative; transition: border-color 0.3s, box-shadow 0.3s;
+  animation: fadeUp 0.5s ease both;
+}
+.goal-card:hover { border-color: var(--border2); box-shadow: 0 8px 40px rgba(0,0,0,0.3); }
+.goal-card.complete { border-color: rgba(67,232,160,0.25); box-shadow: 0 0 30px rgba(67,232,160,0.06); }
+
+.card-bar {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--accent), #a78bfa);
+}
+.goal-card.complete .card-bar { background: linear-gradient(180deg, var(--accent3), #43e8c0); }
+
+.card-header {
+  padding: 1.4rem 1.5rem 1.2rem 1.5rem;
+  display: flex; align-items: flex-start; gap: 1rem;
+}
+
+.card-emoji {
+  width: 50px; height: 50px; display: flex; align-items: center;
+  justify-content: center; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 14px;
+  font-size: 1.5rem; flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.goal-card:hover .card-emoji { transform: scale(1.06) rotate(-3deg); }
+
+.card-text { flex: 1; min-width: 0; }
+
+.card-name {
+  font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em;
+  line-height: 1.3; margin-bottom: 0.3rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.card-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+.shop-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2);
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 0.2rem 0.6rem; border-radius: 6px;
+}
+
+.prod-link {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+  color: var(--accent); text-decoration: none; letter-spacing: 0.06em;
+  opacity: 0.75; transition: opacity 0.2s;
+}
+.prod-link:hover { opacity: 1; }
+
+.card-price-block { text-align: right; flex-shrink: 0; }
+.card-price { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; white-space: nowrap; }
+.card-price-sub {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+  color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;
+  margin-top: 0.15rem;
+}
+
+/* Progress */
+.card-progress { padding: 0 1.5rem 1.2rem; }
+
+.prog-stats {
+  display: flex; justify-content: space-between;
+  align-items: baseline; margin-bottom: 0.7rem;
+}
+
+.prog-saved {
+  font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; color: var(--accent3);
+}
+
+.prog-need {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  color: var(--muted); letter-spacing: 0.04em;
+}
+.prog-need .hl { color: var(--accent2); font-weight: 500; }
+
+.prog-track {
+  height: 8px; background: var(--surface2);
+  border-radius: 99px; overflow: hidden; margin-bottom: 0.5rem;
+}
+
+.prog-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), #a78bfa);
+  transition: width 0.8s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+}
+.prog-fill::after {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0;
+  width: 20px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12));
+}
+.prog-fill.mid  { background: linear-gradient(90deg, var(--yellow), #f5a442); }
+.prog-fill.low  { background: linear-gradient(90deg, var(--accent2), #ff9a6b); }
+.prog-fill.done { background: linear-gradient(90deg, var(--accent3), #43e8c0); }
+
+.prog-footer { display: flex; justify-content: space-between; align-items: center; }
+
+.status-chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.22rem 0.7rem; border-radius: 99px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;
+}
+.chip-done { background: rgba(67,232,160,0.1);  color: var(--accent3); border: 1px solid rgba(67,232,160,0.2); }
+.chip-near { background: rgba(245,197,66,0.1);  color: var(--yellow);  border: 1px solid rgba(245,197,66,0.2); }
+.chip-mid  { background: rgba(108,99,255,0.1);  color: #a78bfa;        border: 1px solid rgba(108,99,255,0.2); }
+.chip-low  { background: rgba(255,107,107,0.08);color: var(--accent2); border: 1px solid rgba(255,107,107,0.2); }
+
+.prog-pct {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  color: var(--muted); letter-spacing: 0.08em;
+}
+
+/* Card input row */
+.card-inputs {
+  border-top: 1px solid var(--border); padding: 1rem 1.5rem;
+  display: flex; gap: 0.6rem; align-items: flex-end;
+  background: rgba(0,0,0,0.15);
+}
+.input-group { flex: 1; }
+.input-label {
+  display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.input-wrap { position: relative; }
+.input-prefix {
+  position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+  color: var(--muted); pointer-events: none;
+}
+
 .cash-input {
-  width: 100%;
-  padding: 0.6rem 0.75rem 0.6rem 2.2rem;
-  background: var(--track);
-  border: 1.5px solid transparent;
-  border-radius: 8px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--dark);
-  transition: border-color 0.2s, background 0.2s;
-  outline: none;
+  width: 100%; padding: 0.62rem 0.75rem 0.62rem 2.4rem;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem; font-weight: 500; color: var(--text);
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  -moz-appearance: textfield;
 }
+.cash-input::-webkit-outer-spin-button,
+.cash-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.cash-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 
-.cash-input:focus {
-  border-color: var(--accent2);
-  background: #fff;
-}
-
-.set-btn {
+.save-btn {
   padding: 0.62rem 1.1rem;
-  background: var(--dark);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-  white-space: nowrap;
-  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), #a78bfa);
+  color: #fff; border: none; border-radius: 10px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+  cursor: pointer; transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  white-space: nowrap; flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(108,99,255,0.3);
 }
-.set-btn:hover { background: var(--accent); transform: translateY(-1px); }
-.set-btn:active { transform: translateY(0); }
+.save-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(108,99,255,0.4); }
+.save-btn:active { transform: translateY(0); }
 
-/* Status badge */
-.status-row {
-  padding: 0 1.5rem 1.2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.del-btn {
+  padding: 0.62rem 0.75rem; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 10px;
+  color: var(--muted); font-size: 0.8rem; cursor: pointer; flex-shrink: 0;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
+.del-btn:hover { color: var(--accent2); border-color: rgba(255,107,107,0.3); background: rgba(255,107,107,0.05); }
 
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: 99px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-.badge-ok {
-  background: rgba(45,106,79,0.1);
-  color: var(--accent2);
-  border: 1px solid rgba(45,106,79,0.2);
-}
-
-.badge-warn {
-  background: rgba(232,162,13,0.12);
-  color: #b87c00;
-  border: 1px solid rgba(232,162,13,0.25);
-}
-
-.badge-no {
-  background: rgba(232,56,13,0.08);
-  color: var(--accent);
-  border: 1px solid rgba(232,56,13,0.2);
-}
-
-/* Add goal button */
+/* ADD BUTTON */
 .add-btn {
-  display: block;
-  max-width: 560px;
-  margin: 0 auto 1.5rem;
-  width: 100%;
-  padding: 0.9rem;
-  background: transparent;
-  border: 1.5px dashed var(--border);
-  border-radius: 14px;
-  color: var(--muted);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-  animation: slideUp 0.5s ease both 0.3s;
+  width: 100%; padding: 1rem; background: transparent;
+  border: 1px dashed var(--border2); border-radius: 18px;
+  color: var(--muted); font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s;
+  animation: fadeUp 0.5s ease both 0.4s; margin-top: 0.5rem;
 }
-.add-btn:hover { color: var(--dark); border-color: var(--dark); }
+.add-btn:hover { color: var(--accent); border-color: rgba(108,99,255,0.3); background: rgba(108,99,255,0.04); }
 
-/* Add form modal overlay */
+/* MODAL */
 .overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(26,20,16,0.5);
-  backdrop-filter: blur(4px);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+  z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;
 }
 .overlay.open { display: flex; }
 
 .modal {
-  background: var(--card);
-  border: 1.5px solid var(--border);
-  border-radius: 18px;
-  padding: 1.8rem;
-  width: 100%;
-  max-width: 420px;
-  animation: slideUp 0.3s ease;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 22px; padding: 2rem; width: 100%; max-width: 440px;
+  animation: fadeUp 0.3s ease;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(108,99,255,0.1);
+  position: relative; overflow: hidden;
+}
+.modal::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), #a78bfa, var(--accent3));
 }
 
-.modal h2 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2rem;
-  margin-bottom: 1.2rem;
-  letter-spacing: 0.03em;
+.modal-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+.modal-title span {
+  background: linear-gradient(135deg, var(--accent), #a78bfa);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 
-.modal .input-label { margin-top: 0.8rem; }
+.form-row { margin-bottom: 1rem; }
+.form-row .input-label { display: block; margin-bottom: 0.45rem; }
+.form-2col { display: grid; grid-template-columns: 1fr 90px; gap: 0.8rem; }
 
-.modal .cash-input {
-  padding-left: 0.75rem;
+.modal-input {
+  width: 100%; padding: 0.7rem 0.9rem;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem; color: var(--text); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
+.modal-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.modal-input::placeholder { color: var(--muted); }
 
-.modal-actions {
-  display: flex;
-  gap: 0.7rem;
-  margin-top: 1.4rem;
-}
+.modal-actions { display: flex; gap: 0.7rem; margin-top: 1.5rem; }
 
-.modal-actions .set-btn { flex: 1; padding: 0.75rem; }
-
-.cancel-btn {
-  flex: 0 0 auto;
-  padding: 0.75rem 1rem;
-  background: var(--track);
-  border: none;
-  border-radius: 8px;
-  color: var(--muted);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
+.modal-cancel {
+  padding: 0.75rem 1.1rem; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 10px; color: var(--muted2);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
   transition: color 0.2s;
 }
-.cancel-btn:hover { color: var(--dark); }
+.modal-cancel:hover { color: var(--text); }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
+.modal-submit {
+  flex: 1; padding: 0.75rem;
+  background: linear-gradient(135deg, var(--accent), #a78bfa);
+  color: #fff; border: none; border-radius: 10px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 15px rgba(108,99,255,0.3);
+}
+.modal-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 2rem; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 0.75rem 1.4rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.08em; z-index: 200;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4); white-space: nowrap; pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
+  50%       { opacity: 0.5; box-shadow: 0 0 4px var(--accent); }
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+@media (max-width: 480px) {
+  .title { font-size: 2.8rem; }
+  .card-price { font-size: 1.2rem; }
+  .header-meta { gap: 1rem; }
 }
 </style>
 </head>
 <body>
 
-<div style="max-width:560px;margin:0 auto;">
-  <div class="page-title">SAVING<br><span>GOALS</span></div>
-  <div class="page-sub">// kolik mám · kolik potřebuju</div>
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<div class="wrapper">
+
+  <header class="header">
+    <div class="header-tag">Savings Tracker</div>
+    <h1 class="title">SPOŘÍCÍ<br><span class="title-grad">CÍLE</span></h1>
+    <div class="header-meta">
+      <div class="header-stat">Uloženo: <strong id="hdr-saved">0 Kč</strong></div>
+      <div class="hdr-divider"></div>
+      <div class="header-stat">Cílů: <strong id="hdr-count">0</strong></div>
+      <div class="hdr-divider"></div>
+      <div class="header-stat">Zbývá: <strong id="hdr-needed">0 Kč</strong></div>
+    </div>
+  </header>
+
+  <div class="total-bar">
+    <div>
+      <div class="total-label">Celkový pokrok</div>
+      <div class="total-amount" id="total-saved-val">0 <span>Kč</span></div>
+      <div class="total-sub">z <em id="total-target-val">0 Kč</em></div>
+    </div>
+    <div class="total-ring">
+      <svg viewBox="0 0 64 64" width="64" height="64">
+        <defs>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6c63ff"/>
+            <stop offset="100%" stop-color="#43e8a0"/>
+          </linearGradient>
+        </defs>
+        <circle class="ring-bg" cx="32" cy="32" r="26"/>
+        <circle class="ring-fill" id="ring-fill" cx="32" cy="32" r="26"/>
+      </svg>
+      <div class="ring-label" id="ring-label">0%</div>
+    </div>
+  </div>
+
+  <div id="goals-container"></div>
+
+  <button class="add-btn" onclick="openModal()">＋ Přidat nový cíl</button>
+
 </div>
 
-<div id="goals-container"></div>
-
-<button class="add-btn" onclick="openModal()">+ Přidat nový cíl</button>
-
-<!-- Add goal modal -->
+<!-- Modal -->
 <div class="overlay" id="overlay">
   <div class="modal">
-    <h2>Nový Cíl</h2>
-    <label class="input-label">Název</label>
-    <input class="cash-input" id="new-name" placeholder="např. AirPods Pro" style="padding-left:0.75rem">
-
-    <label class="input-label">Cena (CZK)</label>
-    <input class="cash-input" id="new-price" type="number" placeholder="0" style="padding-left:0.75rem">
-
-    <label class="input-label">Link (volitelné)</label>
-    <input class="cash-input" id="new-link" type="url" placeholder="https://..." style="padding-left:0.75rem">
-
-    <label class="input-label">Obchod</label>
-    <input class="cash-input" id="new-shop" placeholder="Alza, Mall, ..." style="padding-left:0.75rem">
-
-    <label class="input-label">Emoji</label>
-    <input class="cash-input" id="new-emoji" placeholder="🎧" style="padding-left:0.75rem; width:80px">
-
+    <div class="modal-title">Nový <span>Cíl</span></div>
+    <div class="form-row">
+      <label class="input-label">Název produktu</label>
+      <input class="modal-input" id="new-name" placeholder="např. iPhone 15 Pro">
+    </div>
+    <div class="form-row form-2col">
+      <div>
+        <label class="input-label">Cena (CZK)</label>
+        <input class="modal-input" id="new-price" type="number" placeholder="0">
+      </div>
+      <div>
+        <label class="input-label">Emoji</label>
+        <input class="modal-input" id="new-emoji" placeholder="🛒">
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="input-label">Obchod</label>
+      <input class="modal-input" id="new-shop" placeholder="Alza, Mall, Swappie...">
+    </div>
+    <div class="form-row">
+      <label class="input-label">Odkaz (volitelné)</label>
+      <input class="modal-input" id="new-link" type="url" placeholder="https://...">
+    </div>
     <div class="modal-actions">
-      <button class="cancel-btn" onclick="closeModal()">Zrušit</button>
-      <button class="set-btn" onclick="addGoal()">Přidat cíl →</button>
+      <button class="modal-cancel" onclick="closeModal()">Zrušit</button>
+      <button class="modal-submit" onclick="addGoal()">Přidat cíl →</button>
     </div>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-// ── Data ─────────────────────────────────────────────────────────────────────
 let goals = [
   {
     id: 1,
-    name: "iPhone 15 Pro 256GB Černý Titan",
-    price: 15590,
+    name: "iPhone 15 256GB Černý Titan",
+    price: 14000,
     currency: "CZK",
-    link: "https://swappie.com/cz/iphone/iphone-15-pro/iphone-15-pro-256gb-cerny-titan-18/",
+    link: "https://swappie.com/cz/iphone/iphone-15/iphone-15-256gb-cerna-8/",
     shop: "Swappie",
     saved: 0,
     emoji: "📱",
@@ -451,87 +516,130 @@ let goals = [
   }
 ];
 
-// Load from localStorage if available
-try {
-  const stored = localStorage.getItem('savings-goals');
-  if (stored) goals = JSON.parse(stored);
-} catch(e) {}
+try { const s = localStorage.getItem('sgt-v2'); if (s) goals = JSON.parse(s); } catch(e) {}
 
-function save() {
-  try { localStorage.setItem('savings-goals', JSON.stringify(goals)); } catch(e) {}
+function persist() { try { localStorage.setItem('sgt-v2', JSON.stringify(goals)); } catch(e) {} }
+
+function fmt(n) { return n.toLocaleString('cs-CZ') + ' Kč'; }
+
+function updateTotals() {
+  const saved  = goals.reduce((s, g) => s + g.saved, 0);
+  const target = goals.reduce((s, g) => s + g.price, 0);
+  const needed = Math.max(0, target - saved);
+  const pct    = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
+
+  document.getElementById('hdr-saved').textContent    = fmt(saved);
+  document.getElementById('hdr-count').textContent    = goals.length;
+  document.getElementById('hdr-needed').textContent   = fmt(needed);
+  document.getElementById('total-saved-val').innerHTML = saved.toLocaleString('cs-CZ') + ' <span>Kč</span>';
+  document.getElementById('total-target-val').textContent = fmt(target);
+  document.getElementById('ring-label').textContent   = pct + '%';
+  document.getElementById('ring-fill').style.strokeDashoffset = 163 - (pct / 100) * 163;
 }
 
-// ── Render ────────────────────────────────────────────────────────────────────
 function render() {
-  const container = document.getElementById('goals-container');
-  container.innerHTML = '';
+  const c = document.getElementById('goals-container');
+  c.innerHTML = '';
+
   goals.forEach((g, i) => {
-    const pct = Math.min(100, Math.round((g.saved / g.price) * 100));
+    const pct    = g.price > 0 ? Math.min(100, Math.round((g.saved / g.price) * 100)) : 0;
     const needed = Math.max(0, g.price - g.saved);
-    const fillClass = pct >= 100 ? 'badge-ok' : pct >= 50 ? 'badge-warn' : 'badge-no';
-    const barClass  = pct >= 100 ? '' : pct >= 50 ? 'mid' : 'danger';
-    let statusText = pct >= 100 ? '✓ Máš dost!' : pct >= 75 ? 'Skoro tam' : pct >= 50 ? 'Dobrý progres' : pct >= 20 ? 'Šetříš...' : 'Ještě daleko';
+    const done   = pct >= 100;
 
-    container.innerHTML += `
-    <div class="goal-card" style="animation-delay:${i*0.08}s">
-      <div class="card-top">
+    let barCls, chipCls, chipTxt;
+    if      (done)    { barCls='done'; chipCls='chip-done'; chipTxt='✓ Máš dost! 🎉'; }
+    else if (pct>=75) { barCls='';    chipCls='chip-near'; chipTxt='Skoro tam'; }
+    else if (pct>=40) { barCls='mid'; chipCls='chip-mid';  chipTxt='Dobrý progres'; }
+    else              { barCls='low'; chipCls='chip-low';  chipTxt='Ještě daleko'; }
+
+    const delBtnHtml = goals.length > 1
+      ? `<button class="del-btn" onclick="removeGoal(${g.id})" title="Odstranit">✕</button>`
+      : '';
+
+    const div = document.createElement('div');
+    div.className = 'goal-card' + (done ? ' complete' : '');
+    div.style.animationDelay = (i * 0.08) + 's';
+    div.innerHTML = `
+      <div class="card-bar"></div>
+      <div class="card-header">
         <div class="card-emoji">${g.emoji}</div>
-        <div class="card-info">
-          <div class="card-name">${g.name}</div>
-          <div class="card-shop">${g.shop}</div>
-          ${g.link ? `<a class="card-link" href="${g.link}" target="_blank">Odkaz na produkt ↗</a>` : ''}
-        </div>
-        <div class="card-price">${g.price.toLocaleString('cs-CZ')} Kč</div>
-      </div>
-
-      <div class="card-progress">
-        <div class="progress-nums">
-          <div class="num-saved">${g.saved.toLocaleString('cs-CZ')} Kč uloženo</div>
-          <div class="num-needed">chybí <span class="hl">${needed.toLocaleString('cs-CZ')} Kč</span></div>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill ${barClass}" style="width:${pct}%"></div>
-        </div>
-        <div class="progress-pct">${pct} %</div>
-      </div>
-
-      <div class="card-inputs">
-        <div class="input-group">
-          <label class="input-label">Mám cash</label>
-          <div class="input-wrap">
-            <span>Kč</span>
-            <input class="cash-input" type="number" id="input-${g.id}" value="${g.saved}" min="0">
+        <div class="card-text">
+          <div class="card-name" title="${g.name}">${g.name}</div>
+          <div class="card-meta">
+            <span class="shop-tag">${g.shop}</span>
+            ${g.link ? `<a class="prod-link" href="${g.link}" target="_blank" rel="noopener">↗ odkaz</a>` : ''}
           </div>
         </div>
-        <button class="set-btn" onclick="updateSaved(${g.id})">Uložit →</button>
-        ${goals.length > 1 ? `<button class="set-btn" style="background:var(--track);color:var(--muted);padding:0.62rem 0.8rem" onclick="removeGoal(${g.id})">✕</button>` : ''}
+        <div class="card-price-block">
+          <div class="card-price">${g.price.toLocaleString('cs-CZ')}</div>
+          <div class="card-price-sub">CZK</div>
+        </div>
       </div>
+      <div class="card-progress">
+        <div class="prog-stats">
+          <div class="prog-saved">${fmt(g.saved)}</div>
+          <div class="prog-need">chybí <span class="hl">${fmt(needed)}</span></div>
+        </div>
+        <div class="prog-track">
+          <div class="prog-fill ${barCls}" id="bar-${g.id}" style="width:0%"></div>
+        </div>
+        <div class="prog-footer">
+          <span class="status-chip ${chipCls}">${chipTxt}</span>
+          <span class="prog-pct">${pct} %</span>
+        </div>
+      </div>
+      <div class="card-inputs">
+        <div class="input-group">
+          <label class="input-label">Mám naspořeno</label>
+          <div class="input-wrap">
+            <span class="input-prefix">Kč</span>
+            <input class="cash-input" type="number" id="input-${g.id}" value="${g.saved}" min="0" placeholder="0">
+          </div>
+        </div>
+        <button class="save-btn" onclick="updateSaved(${g.id})">Uložit →</button>
+        ${delBtnHtml}
+      </div>
+    `;
+    c.appendChild(div);
 
-      <div class="status-row">
-        <span class="status-badge ${fillClass}">${statusText}</span>
-        ${pct >= 100 ? '<span style="font-size:1.2rem">🎉</span>' : ''}
-      </div>
-    </div>`;
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const bar = document.getElementById('bar-' + g.id);
+        if (bar) bar.style.width = pct + '%';
+      }, 60 + i * 80);
+    });
   });
+
+  updateTotals();
 }
 
 function updateSaved(id) {
-  const val = parseFloat(document.getElementById('input-' + id).value) || 0;
+  const val = Math.max(0, parseFloat(document.getElementById('input-' + id).value) || 0);
   const g = goals.find(x => x.id === id);
-  if (g) { g.saved = val; save(); render(); }
+  if (!g) return;
+  g.saved = val; persist(); render();
+  showToast('💾 Uloženo!');
 }
 
 function removeGoal(id) {
-  goals = goals.filter(x => x.id !== id);
-  save(); render();
+  if (!confirm('Opravdu odstranit tento cíl?')) return;
+  goals = goals.filter(x => x.id !== id); persist(); render();
+  showToast('🗑 Cíl odstraněn');
 }
 
-// ── Modal ─────────────────────────────────────────────────────────────────────
-function openModal() { document.getElementById('overlay').classList.add('open'); }
+function openModal()  { document.getElementById('overlay').classList.add('open'); setTimeout(() => document.getElementById('new-name').focus(), 100); }
 function closeModal() { document.getElementById('overlay').classList.remove('open'); }
 
 document.getElementById('overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('overlay')) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Enter' && e.target.classList.contains('cash-input')) {
+    const id = parseInt(e.target.id.replace('input-', ''));
+    if (!isNaN(id)) updateSaved(id);
+  }
 });
 
 function addGoal() {
@@ -540,16 +648,21 @@ function addGoal() {
   const link  = document.getElementById('new-link').value.trim();
   const shop  = document.getElementById('new-shop').value.trim() || 'Neznámý';
   const emoji = document.getElementById('new-emoji').value.trim() || '🛒';
-  if (!name || !price) return;
-
-  goals.push({
-    id: Date.now(),
-    name, price, link, shop, emoji,
-    currency: 'CZK', saved: 0,
-    created: new Date().toISOString().slice(0,10)
-  });
-  save(); render(); closeModal();
+  if (!name || !price) { showToast('⚠ Vyplň název a cenu', true); return; }
+  goals.push({ id: Date.now(), name, price, link, shop, emoji, currency: 'CZK', saved: 0, created: new Date().toISOString().slice(0,10) });
+  persist(); render(); closeModal();
   ['new-name','new-price','new-link','new-shop','new-emoji'].forEach(id => document.getElementById(id).value = '');
+  showToast('✓ Cíl přidán!');
+}
+
+let toastTimer;
+function showToast(msg, warn = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.color = warn ? 'var(--yellow)' : 'var(--accent3)';
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
 render();
